@@ -1,0 +1,32 @@
+---
+title: "SAS Handbook"
+---
+
+This Handbook initially follows the instructions from the video: [Learn the basics of SAS Programming](https://www.youtube.com/watch?v=vQZ0DSUTAzQ)
+
+# Basics
+
+``` sass
+/* For commenting */
+```
+
+Columns are called 'Variables' and rows are called 'Observations'. Character variables are left indented and the Numeric variables are right indented. Missing data for the character variables will be denoted by blanks and for the numerical variables will be denoted by the '.'. On the left side menu of the SAS_ondemand, there is a folder called Libraries. In that Libraries folder, there is another sub-folder called SASHELP. In this sashelp, there are some saved data files. It is the easiest to work with these saved data sets to learn about SAS.
+
+SAS has separated the codes into two steps. One is called the Data step and the another is called the Proc step. In the data step, we mainly manipulate the data. To understand the set statement, we need to understand the set-up of libraries. SAS organizes the data sets in libraries. You can think of data sets as books, and certain books may belong to certain libraries. So, there are multiple libraries in SAS, such as SASHELP, SASUSER, WORK, etc. Here, the WORK library stores the temporary data sets. Now, let's try to understand the codes below.
+
+``` sass
+DATA female_class_report; /*naming the generated data set. It will be save to the temporary data library WORK*/
+    set sashelp.class; /*this will bring the class data from sashelp library*/
+    if sex = 'F';
+    put 'report for female students only';
+run;
+```
+
+## Creating libraries
+
+Created data sets are temporarily saved in the WORK library. However, if we need to permanently save our created data sets, then we need to save it in a folder through a created library. Therefore, we need to create a folder in the 'Server Files and the Folders' -\> 'Created_folder' -\> Properties option -\> copy the location. Then run the similar code:
+
+``` sass
+libname my_lib '/home/u62633132/Class_data' ;
+run;
+```

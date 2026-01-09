@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Overview",
+    "section": "",
+    "text": "I will write down the summary knowledge of different programming languages here so that it becomes easier for future reference."
+  },
+  {
+    "objectID": "sas.html",
+    "href": "sas.html",
+    "title": "SAS Handbook",
+    "section": "",
+    "text": "This Handbook initially follows the instructions from the video: Learn the basics of SAS Programming"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "sas.html#creating-libraries",
+    "href": "sas.html#creating-libraries",
+    "title": "SAS Handbook",
+    "section": "Creating libraries",
+    "text": "Creating libraries\nCreated data sets are temporarily saved in the WORK library. However, if we need to permanently save our created data sets, then we need to save it in a folder through a created library. Therefore, we need to create a folder in the ‘Server Files and the Folders’ -&gt; ‘Created_folder’ -&gt; Properties option -&gt; copy the location. Then run the similar code:\nlibname my_lib '/home/u62633132/Class_data' ;\nrun;"
+  }
+]
