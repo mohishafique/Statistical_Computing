@@ -2,12 +2,14 @@
 title: "SAS Handbook"
 ---
 
-This Handbook initially follows the instructions from the video: [Learn the basics of SAS Programming](https://www.youtube.com/watch?v=vQZ0DSUTAzQ)
+# Learn the Basics of SAS Programming
 
-# Basics
+This Chapter initially follows the instructions from the video: [Learn the basics of SAS Programming](https://www.youtube.com/watch?v=vQZ0DSUTAzQ)
 
 ``` sass
-/* For commenting */
+/*For commenting */
+or 
+*For inline comment;
 ```
 
 Columns are called 'Variables' and rows are called 'Observations'. Character variables are left indented and the Numeric variables are right indented. Missing data for the character variables will be denoted by blanks and for the numerical variables will be denoted by the '.'. On the left side menu of the SAS_ondemand, there is a folder called Libraries. In that Libraries folder, there is another sub-folder called SASHELP. In this sashelp, there are some saved data files. It is the easiest to work with these saved data sets to learn about SAS.
@@ -15,18 +17,195 @@ Columns are called 'Variables' and rows are called 'Observations'. Character var
 SAS has separated the codes into two steps. One is called the Data step and the another is called the Proc step. In the data step, we mainly manipulate the data. To understand the set statement, we need to understand the set-up of libraries. SAS organizes the data sets in libraries. You can think of data sets as books, and certain books may belong to certain libraries. So, there are multiple libraries in SAS, such as SASHELP, SASUSER, WORK, etc. Here, the WORK library stores the temporary data sets. Now, let's try to understand the codes below.
 
 ``` sass
-DATA female_class_report; /*naming the generated data set. It will be save to the temporary data library WORK*/
-    set sashelp.class; /*this will bring the class data from sashelp library*/
-    if sex = 'F';
+DATA female_class_report; *naming the generated data set. It will be save to the temporary data library WORK;
+    set sashelp.class; *This will bring the class data from sashelp library;
+    if sex = 'F'; *This writes to the log;
     put 'report for female students only';
 run;
 ```
 
 ## Creating libraries
 
-Created data sets are temporarily saved in the WORK library. However, if we need to permanently save our created data sets, then we need to save it in a folder through a created library. Therefore, we need to create a folder in the 'Server Files and the Folders' -\> 'Created_folder' -\> Properties option -\> copy the location. Then run the similar code:
+Created data sets are temporarily saved in the WORK library. However, if we need to permanently save our created data sets, then we need to save it in a folder through a created library. Therefore, we need to create a folder in the 'Server Files and the Folders' -\> 'Created_folder' -\> Properties option -\> copy the location. Then run a similar code to create a library:
 
 ``` sass
 libname my_lib '/home/u62633132/Class_data' ;
+run;
+```
+
+## Importing and Exporting a Data-set
+
+At first, create a library where you can save the imported data-set. Then import the data-set using the Proc Import command. The easiest way to import the data: Go to a saved folder in the Server Files and Folders-\> Your Saved Folder-\> Upload the data by clicking the Upload sign-\> Right click on the newly Uploaded data-\> Import-\> Copy the code (change the new name of the data-set if necessay).
+
+``` sass
+%web_drop_table(WORK.IMPORT);
+
+
+FILENAME REFFILE '/home/u62633132/Class_data/countries.csv';
+
+PROC IMPORT DATAFILE=REFFILE
+	DBMS=CSV
+	OUT=WORK.TEMP_DATA;
+	GETNAMES=YES;
+RUN;
+
+PROC CONTENTS DATA=WORK.IMPORT; RUN;
+
+%web_open_table(WORK.IMPORT);
+ 
+```
+
+The easiest way to exporting a data-set will be: go to the data-set in a particular library-\> Right click -\> Export
+
+## Typing a New Data
+
+Although as a statistician we often don't need to type the data-set, the knowledge is needed for creating new variables.
+
+``` sass
+data test_data;
+  input Name $ Height Weight; *input is used to declare variable name and $ on the right of the variable is used to indicate it's a character variable;
+  dataline; *This line declares we are inputting data;
+  Ben 154 182
+  Pablo 172 155
+  Jen 160 140
+  ;
+  run;
+```
+
+Or you can use the column numbers to input the data:
+
+``` sass
+data test_data;
+  input Name $1-6 Height 7-9 Weight 11-13; *input is used to declare variable name and $ on the right of the variable is used to indicate it's a character variable;
+  dataline; *This line declares we are inputting data;
+  Ben   154 182
+  Pablo 172 155
+  Jen   160 140
+  ;
+  run;
+```
+
+The last important thing is to learn about the Informats. Sometimes, we need to input special characters, such as dollar sign or /, for inputting data-sets.
+
+``` sass
+data customer_trans;
+  input Price DOLLAR6. Region $ Date MMDDYY10.;
+  datalines;
+$54.15 NW 01/01/2003
+$62.38 SW 04/13/2003
+$82.55 NE 06/15/2003
+;
+run;
+```
+
+To learn about the different informats, check the book (or any other resources?)\
+\
+But the output from above will be little bit funky. To solve the issue, we need to use the format command. So, the informat and format command may come together.
+
+``` sass
+data customer_trans;
+  format MMDDYY10.;
+  input Price DOLLAR6. Region $ Date MMDDYY10.;
+  datalines;
+$54.15 NW 01/01/2003
+$62.38 SW 04/13/2003
+$82.55 NE 06/15/2003
+;
+run;
+```
+
+We can also define our new formats using the proc format command.
+
+``` sass
+proc format;
+  value $gender 'M' = 'Male'
+                'F' = 'Female';
+  value level 11 12 = 'Pre-Teen'
+              13 - HIGH = 'Teen';
+run;
+
+Proc print data = sashelp.class;
+  format sex $gender. Age level.;
+run;
+```
+
+## Conditional Statements
+
+``` sass
+data fish_new;
+	length fish_size $10; *length command is used instead of input command;
+	set sashelp.fish;
+	if length1 < 10 then fish_size = 'small';
+	else fish_size = 'others';
+run;
+```
+
+The above length command is not necessary. But it will not allow more than 8 characters. So, if someone needs more than 8 characters, it is important to define the length of the new variable by that length command. The only problem is it will bring the new variable at the beginning of the data-set.
+
+Now, if we need to do multiple tasks based on an if condition, we need to use 'If Then Do;' instead of 'If Then' command.
+
+``` sass
+data fish_new;
+	length fish_size $10;
+	length fish_location $12;
+	set sashelp.fish;
+	
+	if length1 < 10 then do;
+	fish_size = 'small';
+	fish_location = 'salt water';
+	end;
+	
+	if length1 >= 10 then do;
+	fish_size = 'others';
+	fish_location = 'others';
+	end;
+	
+run;
+```
+
+## Some Proc Commands
+
+Learning about the summary of the data:
+
+``` sass
+Proc contents data = sashelp.air;
+run;
+```
+
+Sorting your data:
+
+``` sass
+proc sort data = sashelp.cars out = cars; *Use out option because you cannot overwrite some library, such as sashelp;
+by Make;
+run;
+```
+
+Printing a data:
+
+``` sass
+Proc print data = cars;
+  var Type Invoice Make Model;
+run;
+```
+
+Making summary:
+
+``` sass
+Proc print data = cars;
+  var Type Invoice Make Model;
+  by Type;
+  sum Invoice;
+  title 'Cars Total Invoice by Type';
+run;
+```
+
+## Proc Means
+
+Getting the summary of a numerical variable:
+
+``` sass
+proc means data = sashelp.baseball mean median stddev max min maxdec=2; *maxdec=2 will print upto two decimal points;
+	class div; *If we want to summarize based on a categorical variable;
+	var crhits;
 run;
 ```

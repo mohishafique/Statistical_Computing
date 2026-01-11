@@ -139,9 +139,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#basics" id="toc-basics" class="nav-link active" data-scroll-target="#basics">Basics</a>
+  <li><a href="#learn-the-basics-of-sas-programming" id="toc-learn-the-basics-of-sas-programming" class="nav-link active" data-scroll-target="#learn-the-basics-of-sas-programming">Learn the Basics of SAS Programming</a>
   <ul class="collapse">
   <li><a href="#creating-libraries" id="toc-creating-libraries" class="nav-link" data-scroll-target="#creating-libraries">Creating libraries</a></li>
+  <li><a href="#importing-and-exporting-a-data-set" id="toc-importing-and-exporting-a-data-set" class="nav-link" data-scroll-target="#importing-and-exporting-a-data-set">Importing and Exporting a Data-set</a></li>
+  <li><a href="#typing-a-new-data" id="toc-typing-a-new-data" class="nav-link" data-scroll-target="#typing-a-new-data">Typing a New Data</a></li>
+  <li><a href="#conditional-statements" id="toc-conditional-statements" class="nav-link" data-scroll-target="#conditional-statements">Conditional Statements</a></li>
+  <li><a href="#some-proc-commands" id="toc-some-proc-commands" class="nav-link" data-scroll-target="#some-proc-commands">Some Proc Commands</a></li>
+  <li><a href="#proc-means" id="toc-proc-means" class="nav-link" data-scroll-target="#proc-means">Proc Means</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -166,22 +171,153 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>This Handbook initially follows the instructions from the video: <a href="https://www.youtube.com/watch?v=vQZ0DSUTAzQ">Learn the basics of SAS Programming</a></p>
-<section id="basics" class="level1">
-<h1>Basics</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* For commenting */</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="learn-the-basics-of-sas-programming" class="level1">
+<h1>Learn the Basics of SAS Programming</h1>
+<p>This Chapter initially follows the instructions from the video: <a href="https://www.youtube.com/watch?v=vQZ0DSUTAzQ">Learn the basics of SAS Programming</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*For commenting */</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>or </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>For inline comment;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Columns are called ‘Variables’ and rows are called ‘Observations’. Character variables are left indented and the Numeric variables are right indented. Missing data for the character variables will be denoted by blanks and for the numerical variables will be denoted by the ‘.’. On the left side menu of the SAS_ondemand, there is a folder called Libraries. In that Libraries folder, there is another sub-folder called SASHELP. In this sashelp, there are some saved data files. It is the easiest to work with these saved data sets to learn about SAS.</p>
 <p>SAS has separated the codes into two steps. One is called the Data step and the another is called the Proc step. In the data step, we mainly manipulate the data. To understand the set statement, we need to understand the set-up of libraries. SAS organizes the data sets in libraries. You can think of data sets as books, and certain books may belong to certain libraries. So, there are multiple libraries in SAS, such as SASHELP, SASUSER, WORK, etc. Here, the WORK library stores the temporary data sets. Now, let’s try to understand the codes below.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DATA female_class_report; <span class="co">/*naming the generated data set. It will be save to the temporary data library WORK*/</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    set sashelp<span class="fu">.class</span>; <span class="co">/*this will bring the class data from sashelp library*/</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    if sex = 'F';</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DATA female_class_report; <span class="op">*</span>naming the generated data set<span class="fu">.</span> It will be save to the temporary data library WORK;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    set sashelp<span class="fu">.class</span>; <span class="op">*</span>This will bring the class data from sashelp library;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    if sex = 'F'; <span class="op">*</span>This writes to the log;</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    put 'report for female students only';</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="creating-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="creating-libraries">Creating libraries</h2>
-<p>Created data sets are temporarily saved in the WORK library. However, if we need to permanently save our created data sets, then we need to save it in a folder through a created library. Therefore, we need to create a folder in the ‘Server Files and the Folders’ -&gt; ‘Created_folder’ -&gt; Properties option -&gt; copy the location. Then run the similar code:</p>
+<p>Created data sets are temporarily saved in the WORK library. However, if we need to permanently save our created data sets, then we need to save it in a folder through a created library. Therefore, we need to create a folder in the ‘Server Files and the Folders’ -&gt; ‘Created_folder’ -&gt; Properties option -&gt; copy the location. Then run a similar code to create a library:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>libname my_lib '/home/u62633132/Class_data' ;</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="importing-and-exporting-a-data-set" class="level2">
+<h2 class="anchored" data-anchor-id="importing-and-exporting-a-data-set">Importing and Exporting a Data-set</h2>
+<p>At first, create a library where you can save the imported data-set. Then import the data-set using the Proc Import command. The easiest way to import the data: Go to a saved folder in the Server Files and Folders-&gt; Your Saved Folder-&gt; Upload the data by clicking the Upload sign-&gt; Right click on the newly Uploaded data-&gt; Import-&gt; Copy the code (change the new name of the data-set if necessay).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">%web_drop_table</span>(WORK<span class="fu">.IMPORT</span>);</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>FILENAME REFFILE '/home/u62633132/Class_data/countries<span class="fu">.csv</span>';</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>PROC IMPORT DATAFILE=REFFILE</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    DBMS=CSV</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    OUT=WORK<span class="fu">.TEMP_DATA</span>;</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    GETNAMES=YES;</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>RUN;</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>PROC CONTENTS DATA=WORK<span class="fu">.IMPORT</span>; RUN;</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="bu">%web_open_table</span>(WORK<span class="fu">.IMPORT</span>);</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The easiest way to exporting a data-set will be: go to the data-set in a particular library-&gt; Right click -&gt; Export</p>
+</section>
+<section id="typing-a-new-data" class="level2">
+<h2 class="anchored" data-anchor-id="typing-a-new-data">Typing a New Data</h2>
+<p>Although as a statistician we often don’t need to type the data-set, the knowledge is needed for creating new variables.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data test_data;</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  input Name $ Height Weight; <span class="op">*</span>input is used to declare variable name and $ on the right of the variable is used to indicate it's a character variable;</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  dataline; <span class="op">*</span>This line declares we are inputting data;</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  Ben 154 182</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  Pablo 172 155</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  Jen 160 140</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  ;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or you can use the column numbers to input the data:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data test_data;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  input Name $1-6 Height 7-9 Weight 11-13; <span class="op">*</span>input is used to declare variable name and $ on the right of the variable is used to indicate it's a character variable;</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  dataline; <span class="op">*</span>This line declares we are inputting data;</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  Ben   154 182</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  Pablo 172 155</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  Jen   160 140</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  ;</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The last important thing is to learn about the Informats. Sometimes, we need to input special characters, such as dollar sign or /, for inputting data-sets.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data customer_trans;</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  input Price DOLLAR6<span class="fu">.</span> Region $ Date MMDDYY10<span class="fu">.</span>;</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  datalines;</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>$54<span class="fu">.15</span> NW 01/01/2003</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>$62<span class="fu">.38</span> SW 04/13/2003</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>$82<span class="fu">.55</span> NE 06/15/2003</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>;</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To learn about the different informats, check the book (or any other resources?)<br>
+<br>
+But the output from above will be little bit funky. To solve the issue, we need to use the format command. So, the informat and format command may come together.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data customer_trans;</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  format MMDDYY10<span class="fu">.</span>;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  input Price DOLLAR6<span class="fu">.</span> Region $ Date MMDDYY10<span class="fu">.</span>;</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  datalines;</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>$54<span class="fu">.15</span> NW 01/01/2003</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>$62<span class="fu">.38</span> SW 04/13/2003</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>$82<span class="fu">.55</span> NE 06/15/2003</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>;</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can also define our new formats using the proc format command.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>proc format;</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  value $gender 'M' = 'Male'</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                'F' = 'Female';</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  value level 11 12 = 'Pre-Teen'</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>              13 - HIGH = 'Teen';</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>run;</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>Proc print data = sashelp<span class="fu">.class</span>;</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  format sex $gender<span class="fu">.</span> Age level<span class="fu">.</span>;</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="conditional-statements" class="level2">
+<h2 class="anchored" data-anchor-id="conditional-statements">Conditional Statements</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data fish_new;</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    length fish_size $10; <span class="op">*</span>length command is used instead of input command;</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    set sashelp<span class="fu">.fish</span>;</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    if length1 &lt; 10 then fish_size = 'small';</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    else fish_size = 'others';</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The above length command is not necessary. But it will not allow more than 8 characters. So, if someone needs more than 8 characters, it is important to define the length of the new variable by that length command. The only problem is it will bring the new variable at the beginning of the data-set.</p>
+<p>Now, if we need to do multiple tasks based on an if condition, we need to use ‘If Then Do;’ instead of ‘If Then’ command.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data fish_new;</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    length fish_size $10;</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    length fish_location $12;</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    set sashelp<span class="fu">.fish</span>;</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    if length1 &lt; 10 then do;</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    fish_size = 'small';</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    fish_location = 'salt water';</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    end;</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    if length1 <span class="op">&gt;</span>= 10 then do;</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    fish_size = 'others';</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    fish_location = 'others';</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    end;</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="some-proc-commands" class="level2">
+<h2 class="anchored" data-anchor-id="some-proc-commands">Some Proc Commands</h2>
+<p>Learning about the summary of the data:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Proc contents data = sashelp<span class="fu">.air</span>;</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Sorting your data:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>proc sort data = sashelp<span class="fu">.cars</span> out = cars; <span class="op">*</span>Use out option because you cannot overwrite some library<span class="op">,</span> such as sashelp;</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>by Make;</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Printing a data:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Proc print data = cars;</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  var Type Invoice Make Model;</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Making summary:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Proc print data = cars;</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  var Type Invoice Make Model;</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  by Type;</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  sum Invoice;</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  title 'Cars Total Invoice by Type';</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="proc-means" class="level2">
+<h2 class="anchored" data-anchor-id="proc-means">Proc Means</h2>
+<p>Getting the summary of a numerical variable:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sass code-with-copy"><code class="sourceCode sass"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>proc means data = sashelp<span class="fu">.baseball</span> mean median stddev max min maxdec=2; <span class="op">*</span>maxdec=2 will print upto two decimal points;</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    class div; <span class="op">*</span>If we want to summarize based on a categorical variable;</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    var crhits;</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>run;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
