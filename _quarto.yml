@@ -10,6 +10,8 @@ website:
         text: Home
       - href: sas.qmd
         text: SAS
+      - href: sql.qmd
+        text: SQL
 
 format:
   html:

@@ -44,9 +44,9 @@ At first, create a library where you can save the imported data-set. Then import
 FILENAME REFFILE '/home/u62633132/Class_data/countries.csv';
 
 PROC IMPORT DATAFILE=REFFILE
-	DBMS=CSV
-	OUT=WORK.TEMP_DATA;
-	GETNAMES=YES;
+    DBMS=CSV
+    OUT=WORK.TEMP_DATA;
+    GETNAMES=YES;
 RUN;
 
 PROC CONTENTS DATA=WORK.IMPORT; RUN;
@@ -133,10 +133,10 @@ run;
 
 ``` sass
 data fish_new;
-	length fish_size $10; *length command is used instead of input command;
-	set sashelp.fish;
-	if length1 < 10 then fish_size = 'small';
-	else fish_size = 'others';
+    length fish_size $10; *length command is used instead of input command;
+    set sashelp.fish;
+    if length1 < 10 then fish_size = 'small';
+    else fish_size = 'others';
 run;
 ```
 
@@ -146,20 +146,20 @@ Now, if we need to do multiple tasks based on an if condition, we need to use 'I
 
 ``` sass
 data fish_new;
-	length fish_size $10;
-	length fish_location $12;
-	set sashelp.fish;
-	
-	if length1 < 10 then do;
-	fish_size = 'small';
-	fish_location = 'salt water';
-	end;
-	
-	if length1 >= 10 then do;
-	fish_size = 'others';
-	fish_location = 'others';
-	end;
-	
+    length fish_size $10;
+    length fish_location $12;
+    set sashelp.fish;
+    
+    if length1 < 10 then do;
+    fish_size = 'small';
+    fish_location = 'salt water';
+    end;
+    
+    if length1 >= 10 then do;
+    fish_size = 'others';
+    fish_location = 'others';
+    end;
+    
 run;
 ```
 
@@ -205,7 +205,7 @@ Getting the summary of a numerical variable:
 
 ``` sass
 proc means data = sashelp.baseball mean median stddev max min maxdec=2; *maxdec=2 will print upto two decimal points;
-	class div; *If we want to summarize based on a categorical variable;
-	var crhits;
+    class div; *If we want to summarize based on a categorical variable;
+    var crhits;
 run;
 ```

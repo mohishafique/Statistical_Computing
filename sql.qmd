@@ -1,0 +1,169 @@
+---
+title: "SQL Handbook"
+format: html
+editor: visual
+---
+
+# SQL for Data Analysis
+
+This chapter is the summary of the online course: <https://www.dataskool.org/courses> and the UofSc course [Computing in Statistics](https://gregorkb.github.io/compstat/SQL_basics.html).
+
+Before discussing SQL codes, we need to connect to a database. There are so many different ways to connect to a database. However, if someone is working in the R environment, then the below steps can be followed.
+
+The first step in retrieving data with SQL queries is to create a *connection* to a database. We will do this from within R using the library `mdsr`, which enables connection to a database called “airlines” stored on an Amazon Web Services server. The following R commands establish the connection:
+
+```{r message=FALSE, warning=FALSE}
+library(mdsr) 
+db <- dbConnect_scidb("airlines") # establish a connection to the database "airlines"
+```
+
+The airlines database contains information on about 18 million flights between US airports taking place during the years 2013–2015.\
+\
+Now that we have created a connection to a database, we can submit SQL queries to retrieve data from it. If we are compiling a `.qmd` document in Rstudio, we can execute SQL in a code chunk. We just need to open the code chunk with `{sql connection=<db>}`, where `<db>` is whatever you have named the database connection.
+
+```{sql connection= db}
+-- is used for commenting
+SHOW TABLES 
+```
+
+Now, if we want to know more, specially the column names about a particular table:
+
+```{sql connection=db}
+describe airports
+```
+
+## Six Keywords to memorize
+
+We need to remember: SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY.
+
+```{sql connection=db}
+select name as airport_name -- as stands for alias
+from airports
+limit 5 -- from viewing only the first 5 rows
+```
+
+```{sql connection=db}
+-- now see the use of the where option
+SELECT carrier, origin, dest, year, month, day
+FROM flights 
+WHERE origin = 'DFW' 
+LIMIT 20 
+```
+
+```{sql connection=db}
+-- now see the use of the group by option
+select origin, count(*) as total_row 
+from flights 
+group by origin 
+order by origin -- sometimes it may show out of order
+limit 5
+```
+
+```{sql connection=db}
+-- let's learn about the having option
+select origin, sum(day) as day_sum
+from flights
+group by origin
+having sum(day) >= 18030316 -- interestingly day_sum >= 18030316 may not work
+
+```
+
+## In, Between and Distinct operators
+
+```{sql connection=db}
+SELECT CONCAT(name,' (',faa,')') AS airport, city, lat, lon
+FROM airports
+WHERE lon BETWEEN -90 AND -80 AND lat BETWEEN 45 AND 50
+ORDER BY airport
+```
+
+```{sql connection=db}
+SELECT DISTINCT country
+FROM airports
+```
+
+If we are interested in getting the distinct rows in a table, we can use this distinct operator.
+
+``` sqlpostgresql
+with a as (
+select distinct * from students_combined 
+)
+select count(*) from a
+```
+
+## Merging and Union
+
+```{sql connection=db}
+SELECT flights.origin, airports.name, flights.dest, flights.carrier, airports.alt -- use table aliases here which are defined in FROM
+FROM flights JOIN airports ON flights.origin = airports.faa
+WHERE airports.alt > 5280
+LIMIT 20
+```
+
+There are three specific types of merging:
+
+-   Inner Join On: If you care about the intersection of the data-sets.
+
+-   Left Join On: Put more emphasize on the left table.
+
+-   Right Join On: Put more emphasize on the right table.
+
+-   Full Join On: When you want to keep all rows from both tables, which may introduce incomplete rows.
+
+Sometimes we may need to stack one table with another, which is described as union in SQL.
+
+``` sass
+select * from students
+union
+select * from students_2
+-- this will keep only the unique rows
+-- however, to keep all of the rows
+select * from students
+union all
+select * from students_2
+```
+
+By using union, we can create custom tables.
+
+```{sql connection=db}
+select 'airports' as table_name, count(*) as row_num 
+from airports
+union
+select 'flights', count(*)
+from flights
+union
+select 'carriers', count(*)
+from carriers
+```
+
+Another important concept is creating temporary table.
+
+```{sql connection=db}
+with table_summary as (
+select 'airports' as table_name, count(*) as row_num 
+from airports
+union
+select 'flights', count(*)
+from flights
+union
+select 'carriers', count(*)
+from carriers)
+select * from table_summary
+```
+
+Creating temporary table in this way is called 'Common Table Expression'. Above results can be produced by the below way also.
+
+```{sql connection=db}
+-- another of doing the above
+select * from 
+(
+select 'airports' as table_name, count(*) as row_num 
+from airports
+union
+select 'flights', count(*)
+from flights
+union
+select 'carriers', count(*)
+from carriers
+) as a
+```
