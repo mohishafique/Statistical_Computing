@@ -24,38 +24,67 @@ DATA female_class_report; *naming the generated data set. It will be save to the
 run;
 ```
 
-## Creating libraries
+## Creating Folders and Libraries
 
-Created data sets are temporarily saved in the WORK library. However, if we need to permanently save our created data sets, then we need to save it in a folder through a created library. Therefore, we need to create a folder in the 'Server Files and the Folders' -\> 'Created_folder' -\> Properties option -\> copy the location. Then run a similar code to create a library:
+There might be some reasons for creating a folder.
+
+-   Saving your codes to a particular folder in an organized way for a project
+
+-   Uploading your data-set to a folder
+
+-   Importing an uploaded data-set
+
+-   Saving your modified new data-set to a particular folder
+
+Creating a folder is pretty straightforward by using your mouse. After creating a folder, you may fulfill the above objectives.
+
+**Saving your codes to a particular folder:** Your code scripts can be created by Mouse Right Click-\> New-\> SAS Program (F4). Then write your sas program in the script. Then save it pressing ctrl+s. A pop-up menu will show up where you can set your desired folder as the script's location.
+
+**Uploading data-sets to a particular folder:** First talk about uploading a data-set, which is straightforward. Go to your desired folder-\> Mouse Right Click-\> Upload Files...-\> Choose Files
+
+**Importing and Exporting a data-set:** Although creating a folder isn't the reason for importing a data-set to the sas working environment. However, we import a data to the environment from a folder. Therefore, it is better to talk the steps in this section. The easiest way to import the data is to go to the Uploaded data-\> Import-\> Copy the code (change the new name of the data-set if necessary).
 
 ``` sass
-libname my_lib '/home/u62633132/Class_data' ;
-run;
-```
+/* Generated Code (IMPORT) */
+/* Source File: diabetic_data.csv */
+/* Source Path: /home/u62633132/Class_data */
+/* Code generated on: 1/22/26, 4:39 PM */
 
-## Importing and Exporting a Data-set
-
-At first, create a library where you can save the imported data-set. Then import the data-set using the Proc Import command. The easiest way to import the data: Go to a saved folder in the Server Files and Folders-\> Your Saved Folder-\> Upload the data by clicking the Upload sign-\> Right click on the newly Uploaded data-\> Import-\> Copy the code (change the new name of the data-set if necessay).
-
-``` sass
 %web_drop_table(WORK.IMPORT);
 
 
-FILENAME REFFILE '/home/u62633132/Class_data/countries.csv';
+FILENAME REFFILE '/home/u62633132/Class_data/diabetic_data.csv';
 
 PROC IMPORT DATAFILE=REFFILE
     DBMS=CSV
-    OUT=WORK.TEMP_DATA;
+    OUT=WORK.IMPORT;
     GETNAMES=YES;
 RUN;
 
 PROC CONTENTS DATA=WORK.IMPORT; RUN;
 
-%web_open_table(WORK.IMPORT);
- 
+
+%web_open_table(WORK.IMPORT); 
 ```
 
-The easiest way to exporting a data-set will be: go to the data-set in a particular library-\> Right click -\> Export
+The easiest way to exporting a data-set will be: go to the data-set in a particular library-\> Right click -\> Export.
+
+**Saving your modified new data-set to a particular folder:** Created data sets are temporarily saved in the WORK library. However, if we need to permanently save our created data sets, then we need to save it in a folder through creating a library. So, it is a two step process:
+
+-   **Creating a library and connecting the library to the folder:** In this step, we need to define a library and connect that library to a folder so that whatever data-set we put in that library will automatically be stored in that folder. So, we need to know the path of the folder. We get get that by 'Server Files and the Folders' -\> 'Your_folder' -\> Properties option -\> copy the location. Then run a similar code to create a library called my_lib:
+
+    ``` sass
+    libname my_lib '/home/u62633132/Class_data' ;
+    run;
+    ```
+
+-   **Saving a modified data-set to a folder:** The only thing is you need to mention the library name which is connected to your desired folder.
+
+    ``` sass
+    data my_lib.my_class_data;
+      set sashelp.class;
+    run;
+    ```
 
 ## Typing a New Data
 
@@ -104,7 +133,7 @@ But the output from above will be little bit funky. To solve the issue, we need 
 
 ``` sass
 data customer_trans;
-  format MMDDYY10.;
+  format Date MMDDYY10.;
   input Price DOLLAR6. Region $ Date MMDDYY10.;
   datalines;
 $54.15 NW 01/01/2003
@@ -126,6 +155,63 @@ run;
 
 Proc print data = sashelp.class;
   format sex $gender. Age level.;
+run;
+```
+
+## Proc Contents
+
+To learn about a data-set, proc contents can help.
+
+``` sass
+*Data manupulation in SAS;
+proc contents data = sashelp.baseball varnum; *varnum shows in dataset orders;
+run;
+
+*if someone wants only the name and the lebels;
+proc contents data = sashelp.baseball out = contents_out (keep = name label varnum) noprint;
+run;
+
+proc sort data = contents_out;
+by varnum;
+run;
+
+proc print data=contents_out label;
+  title "Variable names and labels";
+run;
+
+*printing the first couple of rows;
+proc print data = sashelp.baseball (obs=3);
+run;
+
+*sql code doesn't need the parentheses;
+proc sql outobs=4;
+select *
+from sashelp.baseball;
+quit;
+
+*If someone needs only the row and column numbers;
+proc sql;
+  select nobs, nvar
+  from dictionary.tables
+  where libname='SASHELP' and memname='BASEBALL';
+quit;
+
+ods select Attributes;        /* show only the Attributes (summary) table */
+proc contents data=SASHELP.BASEBALL; run;
+ods select all;              /* restore normal ODS selection */
+
+*Exporting a dataset;
+proc contents data = sashelp.baseball out = cont_out (keep = name label varnum) noprint;
+run;
+
+proc sort data = cont_out;
+by varnum;
+run;
+
+proc export data = cont_out 
+	outfile= "/home/u62633132/STAT_771/STAT_771_Data/cont_out.xlsx"
+	dbms=xlsx
+	replace;
 run;
 ```
 
@@ -209,3 +295,70 @@ proc means data = sashelp.baseball mean median stddev max min maxdec=2; *maxdec=
     var crhits;
 run;
 ```
+
+# SAS Macros
+
+This section is the summary of the video [playlist:](https://www.youtube.com/watch?v=Go1SHJPnjgM&list=PLXledyz7GVuJ9qwnEY1jAbo1uPnjARDGG&index=4)
+
+## Types of Macros
+
+-   **Global Macro:** Can be accessed by any SAS program.
+
+-   **Local:** Only for the SAS program you are currently working on.
+
+Macros can be used by the '&' sign.
+
+``` sass
+data _null_;
+    put "Today's date is &sysdate";
+run;
+*This will print;
+*Today's date is 01FEB26;
+```
+
+Local macros can be written using '%Let' systex.
+
+``` sass
+%Let car_make = 'Acura';
+
+data make_analysis;
+    set sashelp.cars;
+    if Make = &car_make;
+run;
+```
+
+## Macro Programs and Others
+
+These macro programs start with %Macro and end with %Mend.
+
+``` sass
+%Macro bar_chart(char_var);
+proc sgplot data = sashelp.cars;
+  hbar &char_var;
+run;
+%MEND;
+
+%bar_chart(origin);
+```
+
+There are two ways to use the put syntax.
+
+``` sass
+*If we only want to print a macro variable value;
+%put %sysday
+
+*However, if we use inside the data or proc steps, it will act like a print statement;
+data _null_;
+  a = 4;
+  b = 3;
+  c = a*b;
+  put c=;
+run;
+
+*To see all the macros;
+%put _USER_;
+```
+
+# Basic Reference
+
+[cheatsheet](https://www.sas.com/content/dam/SAS/documents/technical/certification/exam-content/base-programming-ref-sheet.pdf)
