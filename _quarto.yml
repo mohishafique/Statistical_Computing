@@ -12,6 +12,8 @@ website:
         text: SAS
       - href: sql.qmd
         text: SQL
+      - href: g_hub.qmd
+        text: GitHub
 
 format:
   html:

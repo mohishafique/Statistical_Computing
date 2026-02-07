@@ -138,5 +138,61 @@
     "title": "SAS Handbook",
     "section": "",
     "text": "To learn about a data-set, proc contents can help.\n*Data manupulation in SAS;\nproc contents data = sashelp.baseball varnum; *varnum shows in dataset orders;\nrun;\n\n*if someone wants only the name and the lebels;\nproc contents data = sashelp.baseball out = contents_out (keep = name label varnum) noprint;\nrun;\n\nproc sort data = contents_out;\nby varnum;\nrun;\n\nproc print data=contents_out label;\n  title \"Variable names and labels\";\nrun;\n\n*printing the first couple of rows;\nproc print data = sashelp.baseball (obs=3);\nrun;\n\n*sql code doesn't need the parentheses;\nproc sql outobs=4;\nselect *\nfrom sashelp.baseball;\nquit;\n\n*If someone needs only the row and column numbers;\nproc sql;\n  select nobs, nvar\n  from dictionary.tables\n  where libname='SASHELP' and memname='BASEBALL';\nquit;\n\nods select Attributes;        /* show only the Attributes (summary) table */\nproc contents data=SASHELP.BASEBALL; run;\nods select all;              /* restore normal ODS selection */\n\n*Exporting a dataset;\nproc contents data = sashelp.baseball out = cont_out (keep = name label varnum) noprint;\nrun;\n\nproc sort data = cont_out;\nby varnum;\nrun;\n\nproc export data = cont_out \n    outfile= \"/home/u62633132/STAT_771/STAT_771_Data/cont_out.xlsx\"\n    dbms=xlsx\n    replace;\nrun;"
+  },
+  {
+    "objectID": "g_hub.html",
+    "href": "g_hub.html",
+    "title": "GitHub Handbook",
+    "section": "",
+    "text": "This handbook preliminarily follows the YouTube video Git & GitHub Crash Course for Beginners"
+  },
+  {
+    "objectID": "g_hub.html#quarto",
+    "href": "g_hub.html#quarto",
+    "title": "GitHub Handbook",
+    "section": "",
+    "text": "Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see https://quarto.org."
+  },
+  {
+    "objectID": "g_hub.html#running-code",
+    "href": "g_hub.html#running-code",
+    "title": "GitHub Handbook",
+    "section": "Running Code",
+    "text": "Running Code\nWhen you click the Render button a document will be generated that includes both content and the output of embedded code. You can embed code like this:\n\n1 + 1\n\n[1] 2\n\n\nYou can add options to executable code like this\n\n\n[1] 4\n\n\nThe echo: false option disables the printing of code (only output is displayed)."
+  },
+  {
+    "objectID": "g_hub.html#git-init",
+    "href": "g_hub.html#git-init",
+    "title": "GitHub Handbook",
+    "section": "GiT iNiT",
+    "text": "GiT iNiT\nGitHub claims it tracks when changed, what changed, who changed, and where those happened. If not downloaded, download the GitHub. I comes with another app called Git Bash. Usually both Git and Git Bash are installed in Windows computer. So, you can open the Git Bash app.\n# To check the version\ngit --version\n\n# To go to your directory\ncd Desktop/Git_try\n# Some other common commands are pwd, mkdir\n\n# Create three files, which we will keep track in future\ntouch one.txt\ntouch two.txt\nmkdir my_folder # I want to save the third document in another folder\ncd my_folder\ntouch three.txt\n\n# .. will take back to the previous folder\ncd ..\n\n# You can make some changes to the documents. Or, you may want to save the current files and keep track of these files\n# Make sure you are on the correct folder you can to keep track of\n\ngit init\nThe last command will initialize the tacking by git.\n# If you want to check the git file\nls -la # This shows the hidden files also"
+  },
+  {
+    "objectID": "g_hub.html#remote-repository",
+    "href": "g_hub.html#remote-repository",
+    "title": "GitHub Handbook",
+    "section": "Remote repository",
+    "text": "Remote repository\nNow if you want to save those files on the cloud for couple of reasons, e.g., to share your files with others, to get access from another computers, you need to upload them to a remote repository aka github.\nSteps are: go to github-&gt; Click the New-&gt; Name the new repository-&gt; Create repository\nYou can create or upload files into the github. So, may want to download this repository to you local computer. Here to mention, this repository is an independent one. This one has no relation with the one we discussed in the last section. Sometimes, we start with files shared by others through the github repository. To download a repository, go to the folder you want to download.\n# I was in the git_try folder\n# I don't want to download there.\n# Instead, I wan to download to the Desktop\ncd .. # This takes back to the prior folder\n\n# copy the url link you get after pressin &lt;&gt; Code, the greee button, in github\ngit clone https://github.com/mohishafique/another_try.git\n\ncd another_try\nls -la\n# This will show another git file, which indicates git is tracking the file"
+  },
+  {
+    "objectID": "g_hub.html#status-add-reset-and-commit",
+    "href": "g_hub.html#status-add-reset-and-commit",
+    "title": "GitHub Handbook",
+    "section": "Status, Add, Reset, and Commit",
+    "text": "Status, Add, Reset, and Commit\nAfter changing the folder, we need to check the status of the folder, to add or reset the folder.\ngit status\ngit add --all # alternative is git add -A\n# git add . seems to do the same. However, it stages the file someone is currently at. It doesn't stage files of the parent folders.\n\ngit reset # This unstaged or unadded all the files \ngit reset HEAD~ # This takes back to the previous status before the last commit\ngit reset --hard # Normal reset only unstage the files, but it doesn't bring back the deleted files. To bring back the deleted file --hard is needed. \n\ngit add --all\ngit commit -m \"adding a new folder\"\n\n# If this is the first commit, then you may need to do\ngit config --global user.email \"your_email\"\ngit config --global user.name \"your_name\""
+  },
+  {
+    "objectID": "g_hub.html#git-log",
+    "href": "g_hub.html#git-log",
+    "title": "GitHub Handbook",
+    "section": "Git Log",
+    "text": "Git Log\nGit log is the most important command for knowing different versions.\n# To know the history\ngit log\n\n# To know only the summary about the history\ngit log --oneline\nWhen we talk about different versions and version control, branching comes. Branching is another important idea in git.\n# To know about existing branches\ngit branch\n\n# To create a new branch\ngit branch developement #developement is the given name\nWhen a git branch is created, it exactly copies the current branch at the time of creation. After the creation, we need to switch to that created branch if we want to make changes to that version.\n# entering into the branch\ngit checkout developement\n\n# Now you can add a file to that folder\n# Then stage it using git add command\ngit add .\n# Finally, commit the changes\ngit commit -m 'five.txt file added'\n\n# Now if you switch to the main brach,\n# surprisingly, you won't see the five.txt\ngit checkout main\nls\n# not any five.txt file shown\nSuppose one person is working in the main branch. Another person copies that and does additional updates to the folder. By the meantime, new changes have been made in the main branch. Now, both folders have different updates. Unless both folders have changed the same named files, it is better to merge the main branch to the new branch. And finally, new branch should be merged to the main one.\n# changes have been made in the second branch developement\n# Now, go to main branch and make some changes\ngit checkout main\n\n# after some changes\ngit add .\ngit commit -m 'one.txt has been changed'\n\ngit checkout developement\ngit merge main -m \"merging main into the developement branch\"\n\ngit checkout main\ngit merge developement -m \"merging developement to main\"\nIf changes have been happened in the same file of different branches and we want to merge those two branches, then auto merge will fail. Then you need to open the conflicting file manually and select the version you want. After having the desired modification, you need to add and commit the new changes as per usual rules.\nUsing commit ids as branch name creates ample opportunities in the era of version control.\n# bring the log history\ngit log --oneline\n\n# going back to past\ngit checkout 6cbc4ea # This is the commit ID\n\n# I need to explore little bit more about the following prompt\n# If you want to create a new branch to retain commits you create, you may\n# do so (now or later) by using -c with the switch command. Example:\n# \n#   git switch -c &lt;new-branch-name&gt;\n# \n# Or undo this operation with:\n# \n#   git switch -\n\n# git switch -c &lt;new-branch-name&gt;\n# # is equivalent to \n# git branch &lt;new-branch-name&gt;\n# git switch &lt;new-branch-name&gt;\nTo learn about the differences about two commits:\ngit diff new-branch old-branch\n\n# one last quick tip\ngit log\n# This will open a new terminal\nq # press q to close the terminal"
+  },
+  {
+    "objectID": "g_hub.html#remote-repository-or-github",
+    "href": "g_hub.html#remote-repository-or-github",
+    "title": "GitHub Handbook",
+    "section": "Remote repository or GitHub",
+    "text": "Remote repository or GitHub\nIt is surprising that if you download the git repository from github and work on the folder, the system remembers the remote github repository. Therefore the following command is enough to upload the adjustment made in the local repository.\ngit push origin main\n\n# or if you want to create a new branch in github \ngit push origin developement\n\n# Similarly git fetch\ngit fetch\ngit merge\n\n# git pull in the combination of git ferch and git merge\ngit pull # git pull = git fetch + git merge"
   }
 ]
