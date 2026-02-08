@@ -181,6 +181,22 @@ git log
 q # press q to close the terminal
 ```
 
+To retain back the last commit time status of the folder, I believe there are two option:
+
+``` python
+git reset HEAD~
+# VS
+git restore one.txt 
+# VS
+git checkout # previous commit ID
+
+# Which one is the best among the above?
+# git restore actually don't only unstage the changes, it also undo the changes to the respective file
+git restore . # To restore everything
+git restore --staged one.txt # if the file was staged
+git restore --stages . # to restores everything staged
+```
+
 ## Remote repository or GitHub
 
 It is surprising that if you download the git repository from github and work on the folder, the system remembers the remote github repository. Therefore the following command is enough to upload the adjustment made in the local repository.
