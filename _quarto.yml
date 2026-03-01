@@ -14,6 +14,8 @@ website:
         text: SQL
       - href: g_hub.qmd
         text: GitHub
+      - href: VS_Code.qmd
+        text: VS Code
 
 format:
   html:

@@ -1,0 +1,17 @@
+---
+title: "VS Code"
+format: html
+editor: visual
+---
+
+## Intro
+
+This handbook is primarily following [VS Code for beginners](https://www.youtube.com/watch?v=lWEKiak0WVU)
+
+First thing we do is to open a folder from the left most option 'Explorer'. After opening the folder, we will see New File and New Folder option in the left explorer pane. Now create a new file using the icon. New File-\> index.html. If we come to that specific text file we created, it will show the file type at the right bottom of the VS code editor. We can close the opened files at any time we want. By clicking the files in the explorer pane, we can preview the files. However, if we want to make a text file active, we need to click twice or we may need to click on the preview. If we need multiple screens: right click on the file name-\> split right. To minimize the screens, drag the second screen to another.
+
+Ctrl+F will open the search bar. Here we can search and replace. We can also search and replace through the whole project by the Search toolbar from the left pan.
+
+## Themes and Extensions
+
+We can install extensions. SAS and Prettier are common extensions. If someone like automatically run an extension such as prettier, go to Manage (tool icon)-\> Settings-\> search for 'format'-\> Default Formatter-\> Prettier
